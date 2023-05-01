@@ -44,9 +44,7 @@ class InsertionSortTest {
         int[] expectedArr = {-6, 1, 2, 5};
 
         int[] sortedArr = InsertionSort.sort(unsortedArr);
-        for (int i : sortedArr) {
-            System.out.print(i + ", ");
-        }
+
         assertArrayEquals(expectedArr, sortedArr);
     }
 }
