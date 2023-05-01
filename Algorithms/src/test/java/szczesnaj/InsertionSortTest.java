@@ -22,7 +22,7 @@ class InsertionSortTest {
     }
 
     @Test
-    void twoElementArray_returnSortedArray() {
+    void unsortedTwoElementsArray_returnSortedArray() {
         int[] unsortedArr = {2, 1};
         int[] expectedArr = {1, 2};
         int[] sortedArr = InsertionSort.sort(unsortedArr);
