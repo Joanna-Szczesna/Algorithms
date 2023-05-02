@@ -10,7 +10,7 @@ import java.math.BigInteger;
 
 class Factorial {
     static long countUpToNineteen(int number) {
-        if (number == 0) {
+        if (number == 1 || number == 0) {
             return 1;
         }
         return number * countUpToNineteen(number - 1);
@@ -23,14 +23,14 @@ class Factorial {
 
 
     private static BigInteger countFactorialBigInteger(BigInteger num) {
-        if(num.equals(BigInteger.ZERO)){
+        if (num.equals(BigInteger.ONE) || num.equals(BigInteger.ZERO)) {
             return BigInteger.ONE;
         }
         return num.multiply(countFactorialBigInteger(num.subtract(BigInteger.ONE)));
     }
 
     static Object countFactorial(int num) {
-        if(num <= 19) {
+        if (num <= 19) {
             return countUpToNineteen(num);
         }
         return countBigInteger(num);
