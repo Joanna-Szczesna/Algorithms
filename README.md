@@ -7,3 +7,8 @@
 ## Insertion Sort
 
 ## Bubble Sort
+
+## Factorial
+
+- Long 
+- BigInteger
