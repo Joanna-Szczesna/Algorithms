@@ -1,8 +1,11 @@
 # Algorithms
 
- <img src="/images/jamnik.jpg" width="500" > 
+ <img src="/images/jamnik.jpg" width="400" > 
 
 ## Binary Search
+ 
+- loop
+- recursive
 
 ## Insertion Sort
 
@@ -12,3 +15,6 @@
 
 - Long 
 - BigInteger
+
+## Euclidean Algorithm
+
