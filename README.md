@@ -18,3 +18,8 @@
 
 ## Euclidean Algorithm
 
+
+# Data Structures
+
+## Linked List
+
