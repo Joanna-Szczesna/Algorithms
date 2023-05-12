@@ -3,7 +3,7 @@
  * All rights reserved
  */
 
-package szczesnaj.dataStructure;
+package szczesnaj.datastructures;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,46 +11,45 @@ import org.junit.jupiter.api.Test;
 import static com.google.common.truth.Truth.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
-class LinkedListStructureTest {
-    private LinkedListStructure listStructure;
+class LinkedListStructureGenericTest {
+    private LinkedListStructureGeneric<Integer> listStructure;
 
     @BeforeEach
     void setUp() {
-        listStructure = new LinkedListStructure();
+        listStructure = new LinkedListStructureGeneric<>();
     }
 
     @Test
-    void whenUserAddElementOnStart_newElementExistAsHead() {
+    void givenListIsEmpty_whenUserAddFirstElement_newElementExistOnList() {
         Integer expectedNumber = 5;
         listStructure.addOnStart(expectedNumber);
-        Integer number = listStructure.getList().getNumber();
+        String number = listStructure.getAllNumbers();
 
-        assertEquals(expectedNumber, number);
+        assertEquals("5", number);
     }
 
     @Test
-    void whenUserAddElementOnEndAnHeadNotExist_addedElementIsNewHead() {
-        Integer expectedNumber = 5;
-        listStructure.addOnEnd(expectedNumber);
-        Integer number = listStructure.getList().getNumber();
+    void givenListHasOneElement_whenUserAddElementOnStart_addedElementIsNewHead() {
+        listStructure.addOnStart(1);
+        Integer newHead = 2;
+        listStructure.addOnStart(newHead);
+        String number = listStructure.getAllNumbers();
 
-        assertEquals(expectedNumber, number);
+        assertEquals("2, 1", number);
     }
 
     @Test
-    void whenUserAddElementOnEndHeadExist_addedElementExistAsLatestNext() {
-        Integer expectedNumber = 5;
+    void whenUserAddElementOnEnd_addedElementExistAsLast() {
         listStructure.addOnEnd(1);
+        Integer expectedNumber = 2;
         listStructure.addOnEnd(expectedNumber);
-        Integer number = listStructure
-                .getList()
-                .getNext().getNumber();
+        String number = listStructure.getAllNumbers();
 
-        assertEquals(expectedNumber, number);
+        assertEquals("1, 2", number);
     }
 
     @Test
-    void whenUserShowAllElement_addedElementExist() {
+    void whenUserShowAllElement_addedElementsExist() {
         int[] numbers = {1, 2, 3, 4};
         for (int n : numbers) {
             listStructure.addOnEnd(n);
@@ -70,19 +69,18 @@ class LinkedListStructureTest {
             listStructure.addOnEnd(n);
         }
         listStructure.removeHead();
-        Integer newHeadNum = listStructure.getList().getNumber();
+        String elements = listStructure.getAllNumbers();
 
-        assertEquals(2, newHeadNum);
+        assertEquals("2, 3, 4", elements);
     }
 
     @Test
-    void whenUserRemoveTailThatIsAlsoHeadRecursion_noElements() {
+    void givenListHasOneElement_whenUserRemoveTailRecursion_noElementsInList() {
         int[] numbers = {1};
         for (int n : numbers) {
             listStructure.addOnEnd(n);
         }
         listStructure.removeTailRecursion();
-
         String elements = listStructure.getAllNumbers();
 
         assertThat(elements).doesNotContain("1");
@@ -100,16 +98,16 @@ class LinkedListStructureTest {
         assertThat(elements).contains("1");
         assertThat(elements).contains("2");
         assertThat(elements).doesNotContain("3");
+        assertEquals("1, 2", elements);
     }
 
     @Test
-    void whenUserRemoveTailThatIsAlsoHead_nextNumIsNull() {
+    void givenListHasOneElement_whenUserRemoveTail_noElementsInList() {
         int[] numbers = {1};
         for (int n : numbers) {
             listStructure.addOnEnd(n);
         }
         listStructure.removeTail();
-
         String elements = listStructure.getAllNumbers();
 
         assertThat(elements).doesNotContain("1");
@@ -127,5 +125,14 @@ class LinkedListStructureTest {
         assertThat(elements).contains("1");
         assertThat(elements).contains("2");
         assertThat(elements).doesNotContain("3");
+        assertEquals("1, 2", elements);
+    }
+
+    @Test
+    void givenListIsEmpty_whenUserRemoveTail_noElementsInList() {
+        listStructure.removeTail();
+        String elements = listStructure.getAllNumbers();
+
+        assertEquals("", elements);
     }
 }

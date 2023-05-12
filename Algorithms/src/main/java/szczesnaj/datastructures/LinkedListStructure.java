@@ -3,16 +3,10 @@
  * All rights reserved
  */
 
-package szczesnaj.dataStructure;
-
-import java.util.Objects;
+package szczesnaj.datastructures;
 
 class LinkedListStructure {
     private Node head;
-
-    Node getList() {
-        return head;
-    }
 
     void addOnStart(Integer number) {
         head = new Node(head, number);
@@ -20,7 +14,7 @@ class LinkedListStructure {
 
     void addOnEnd(Integer number) {
         if (head != null) {
-            Node currentLatest = getLatestElementRecursion(head);
+            Node currentLatest = getLastElementRecursion(head);
             currentLatest.setNext(new Node(null, number));
         } else {
             head = new Node(head, number);
@@ -35,11 +29,11 @@ class LinkedListStructure {
         System.out.println(getAllNumbers());
     }
 
-    private Node getLatestElementRecursion(Node list) {
+    private Node getLastElementRecursion(Node list) {
         if (list.getNext() == null) {
             return list;
         }
-        return getLatestElementRecursion(list.getNext());
+        return getLastElementRecursion(list.getNext());
     }
 
     private String getAllElementsNumbersAsOneStringRecursion(Node node) {
@@ -53,43 +47,48 @@ class LinkedListStructure {
     }
 
     void removeHead() {
-        head = head.getNext();
-    }
-
-    void removeTailRecursion() {
-        Node tail = getLatestElementRecursion(head);
-        findAndRemove(tail.hashCode(), head);
+        Node newHead = head.getNext();
+        head.setNext(null); // help GC
+        head = newHead;
     }
 
     void removeTail() {
+        if (head == null) {
+            return;
+        }
         Node oneBefore = head;
         Node tail;
-        if (head != null) {
-            if (head.getNext() == null) {
-                head = null;
-            } else {
-                tail = head;
-                while (tail.getNext() != null) {
-                    oneBefore = tail;
-                    tail = tail.getNext();
-                }
-                oneBefore.setNext(null);
-            }
+
+        if (head.getNext() == null) {
+            head = null;
+            return;
         }
+        tail = head;
+        while (tail.getNext() != null) {
+            oneBefore = tail;
+            tail = tail.getNext();
+        }
+        oneBefore.setNext(null);
+
     }
 
-    private Node findAndRemove(int hashCode, Node list) {
+    void removeTailRecursion() {
+        Node tail = getLastElementRecursion(head);
+        findAndRemove(tail, head);
+    }
+
+    private void findAndRemove(Node node, Node list) {
         if (list.getNext() == null) {
             if (list == head) {
                 head = null;
             }
-            return null;
+            return;
         }
-        if (list.getNext().hashCode() == hashCode) {
+        if (list.getNext() == node) {
             list.setNext(null);
-            return null;
+            return;
         }
-        return findAndRemove(hashCode, list.getNext());
+        findAndRemove(node, list.getNext());
     }
 }
 
@@ -117,17 +116,5 @@ class Node {
     @Override
     public String toString() {
         return " " + number;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Node node)) return false;
-        return Objects.equals(getNext(), node.getNext()) && Objects.equals(getNumber(), node.getNumber());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getNext(), getNumber());
     }
 }
