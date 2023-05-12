@@ -3,7 +3,7 @@
  * All rights reserved
  */
 
-package szczesnaj;
+package szczesnaj.algorithms;
 
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;

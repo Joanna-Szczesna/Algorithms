@@ -3,10 +3,11 @@
  * All rights reserved
  */
 
-package szczesnaj;
+package szczesnaj.algorithms;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import szczesnaj.algorithms.Factorial;
 
 import java.math.BigInteger;
 

@@ -3,9 +3,10 @@
  * All rights reserved
  */
 
-package szczesnaj;
+package szczesnaj.algorithms;
 
 import org.junit.jupiter.api.Test;
+import szczesnaj.algorithms.EuclideanAlgorithm;
 
 import static org.junit.jupiter.api.Assertions.*;
 

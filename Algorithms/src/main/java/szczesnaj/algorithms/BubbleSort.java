@@ -3,7 +3,7 @@
  * All rights reserved
  */
 
-package szczesnaj;
+package szczesnaj.algorithms;
 
 class BubbleSort {
 
