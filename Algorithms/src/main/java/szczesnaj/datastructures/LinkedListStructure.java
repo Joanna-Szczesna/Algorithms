@@ -17,7 +17,7 @@ class LinkedListStructure {
             Node currentLatest = getLastElementRecursion(head);
             currentLatest.setNext(new Node(null, number));
         } else {
-            head = new Node(head, number);
+            head = new Node(null, number);
         }
     }
 
@@ -27,13 +27,6 @@ class LinkedListStructure {
 
     void printAllNumbers() {
         System.out.println(getAllNumbers());
-    }
-
-    private Node getLastElementRecursion(Node list) {
-        if (list.getNext() == null) {
-            return list;
-        }
-        return getLastElementRecursion(list.getNext());
     }
 
     private String getAllElementsNumbersAsOneStringRecursion(Node node) {
@@ -77,18 +70,25 @@ class LinkedListStructure {
         findAndRemove(tail, head);
     }
 
-    private void findAndRemove(Node node, Node list) {
+    private Node getLastElementRecursion(Node list) {
         if (list.getNext() == null) {
-            if (list == head) {
+            return list;
+        }
+        return getLastElementRecursion(list.getNext());
+    }
+
+    private void findAndRemove(Node wanted, Node list) {
+        if (list.getNext() == null) {
+            if (list == wanted) {
                 head = null;
             }
             return;
         }
-        if (list.getNext() == node) {
+        if (list.getNext() == wanted) {
             list.setNext(null);
             return;
         }
-        findAndRemove(node, list.getNext());
+        findAndRemove(wanted, list.getNext());
     }
 }
 
