@@ -18,6 +18,32 @@
 
 ## Euclidean Algorithm
 
+## DFS - Graph Depth First Search 
+
+The first line of input contains a positive number n, next n lines contains pairs of positive integers, where each pair identifies a connection between two vertices in a graph. Please provide a working code that will give us the answer for the following questions: how many separated graphs are in the input.
+
+Sample:
+
+For the input:
+
+3
+4 3
+1 4
+5 6
+expected output is:
+
+2
+
+------------------------------------------------------------
+
+## Dijkstra - Graph
+
+[EN] In a weighted connected graph, find the shortest paths from the selected starting vertex to all other vertices.
+
+[PL] W spójnym grafie ważonym znaleźć najkrótsze ścieżki od wybranego wierzchołka startowego do wszystkich pozostałych wierzchołków.
+
+
+ <img src="/images/musicGraph.jpg" width="400" > 
 
 # Data Structures
 
