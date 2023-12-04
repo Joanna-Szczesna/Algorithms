@@ -1,4 +1,4 @@
-package szczesnaj.algorithms;
+package szczesnaj.algorithms.graphs;
 
 import org.junit.jupiter.api.Test;
 
@@ -8,12 +8,12 @@ import java.nio.file.Paths;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class GraphDepthFirstSearchTest {
+class DepthFirstSearchTest {
     @Test
     void whenCountGraphsFromFileWithEdgesContainsThreeDistjointGraphsReturnThree() throws URISyntaxException {
         URL resource = getClass().getClassLoader().getResource("m_3graphsTest.txt");
         String path = Paths.get(resource.toURI()).toString();
-        int numberGraphs = GraphDepthFirstSearch.countGraphs(path);
+        int numberGraphs = DepthFirstSearch.countGraphs(path);
 
         assertEquals(3, numberGraphs);
     }
