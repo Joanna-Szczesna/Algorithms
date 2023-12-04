@@ -1,0 +1,10 @@
+start book
+meta piano
+book cd 5
+book poster 0
+cd guitar 15
+cd drum 20
+poster guitar 30
+poster drum 35
+guitar piano 20
+drum piano 10

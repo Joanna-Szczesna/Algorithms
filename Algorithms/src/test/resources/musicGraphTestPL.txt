@@ -1,0 +1,10 @@
+start ksiazka
+meta fortepian
+ksiazka plyta 5
+ksiazka plakat 0
+plyta gitara 15
+plyta perkusja 20
+plakat gitara 30
+plakat perkusja 35
+gitara fortepian 20
+perkusja fortepian 10
