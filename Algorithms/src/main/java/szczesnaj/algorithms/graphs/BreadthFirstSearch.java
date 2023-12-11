@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -18,28 +19,28 @@ class BreadthFirstSearch {
     }
 
     static List<Integer> findShortestWay(String fileName, int startNode, int destinationNode) {
-        List<GraphUtils.Edge> edgesFromFile = getEdgesFromFile(fileName);
+        List<Graph.Edge> edgesFromFile = getEdgesFromFile(fileName);
         BreadthFirstSearch task = new BreadthFirstSearch();
         task.adjacentMatrix = createAdjacentMatrix(edgesFromFile);
         return task.bfs(startNode, destinationNode);
     }
 
-    private static List<GraphUtils.Edge> getEdgesFromFile(String fileName) {
+    private static List<Graph.Edge> getEdgesFromFile(String fileName) {
         try (Stream<String> fileStream = Files.lines(Paths.get(fileName))) {
             return fileStream.map(l -> Arrays.stream(l.split(" "))
                             .map(Integer::parseInt)
                             .toList()
-                    ).map(list -> new GraphUtils.Edge(list.get(0), list.get(1)))
+                    ).map(list -> new Graph.Edge(list.get(0), list.get(1)))
                     .toList();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    private static Map<Integer, Set<Integer>> createAdjacentMatrix(List<GraphUtils.Edge> edges) {
+    private static Map<Integer, Set<Integer>> createAdjacentMatrix(List<Graph.Edge> edges) {
         Map<Integer, Set<Integer>> adjacentMatrix = new HashMap<>();
 
-        for (GraphUtils.Edge edge : edges) {
+        for (Graph.Edge edge : edges) {
             adjacentMatrix.putIfAbsent(edge.x, new HashSet<>());
             adjacentMatrix.get(edge.x).add(edge.y);
 
@@ -58,53 +59,41 @@ class BreadthFirstSearch {
         Map<Integer, InfoShortcut> shortcutsTable = new HashMap<>();
         shortcutsTable.put(startNode, new InfoShortcut(null, 0));
 
-        int counter = 1;
+        final AtomicInteger counter = new AtomicInteger(1);
         while (!q.isEmpty()) {
-            Integer step = q.poll();
+            Integer step = q.remove();
             checked.add(step);
-            if (!step.equals(destinationNode)) {
-                Set<Integer> ngbs = this.adjacentMatrix.get(step);
-                Set<Integer> toExam = ngbs.stream()
-                        .filter(v -> !checked.contains(v) & !q.contains(v))
-                        .collect(Collectors.toUnmodifiableSet());
-                q.addAll(toExam);
-                int finalCounter = counter;
-                Map<Integer, InfoShortcut> data = toExam.stream().collect(toMap(
-                        node -> node,
-                        node -> new InfoShortcut(step, finalCounter)
-                ));
-                shortcutsTable.putAll(data);
-            } else {
+            if (step.equals(destinationNode)) {
                 break;
             }
-            counter += 1;
+
+            Set<Integer> ngbs = this.adjacentMatrix.get(step);
+            Set<Integer> toExam = ngbs.stream()
+                    .filter(v -> !checked.contains(v) && !q.contains(v))
+                    .collect(Collectors.toUnmodifiableSet());
+            q.addAll(toExam);
+
+            Map<Integer, InfoShortcut> data = toExam.stream().collect(toMap(
+                    node -> node,
+                    node -> new InfoShortcut(step, counter.get())
+            ));
+            shortcutsTable.putAll(data);
+
+            counter.incrementAndGet();
         }
         return getShortestPath(shortcutsTable, destinationNode);
     }
 
     List<Integer> getShortestPath(Map<Integer, InfoShortcut> data, Integer destinationNode) {
-        Integer ancestor = data.get(destinationNode).ancestor();
+
+        Integer ancestor = destinationNode;
         List<Integer> shortestPath = new ArrayList<>();
-        shortestPath.add(destinationNode);
-        while (ancestor != null) {
+        do {
             shortestPath.add(ancestor);
             ancestor = data.get(ancestor).ancestor();
-        }
+        } while (ancestor != null);
+
         Collections.reverse(shortestPath);
         return shortestPath;
-    }
-}
-
-record InfoShortcut(Integer ancestor, Integer distance) {
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof InfoShortcut that)) return false;
-        return Objects.equals(ancestor, that.ancestor) && Objects.equals(distance, that.distance);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(ancestor, distance);
     }
 }

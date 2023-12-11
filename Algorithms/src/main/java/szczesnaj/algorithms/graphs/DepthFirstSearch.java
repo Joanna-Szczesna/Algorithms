@@ -12,14 +12,14 @@ import static java.util.stream.Collectors.*;
 class DepthFirstSearch {
     private Map<Integer, Set<Integer>> adjacentMatrix;
 
-    private static List<GraphUtils.Edge> getEdgesFromFile(String fileName) {
+    private static List<Graph.Edge> getEdgesFromFile(String fileName) {
         try (Stream<String> fileStream = Files.lines(Paths.get(fileName))) {
             return fileStream
                     .skip(1)
                     .map(s -> Arrays.stream(s.split("\\s+", 2))
                             .map(Integer::parseInt)
                             .toList())
-                    .map(list -> new GraphUtils.Edge(list.get(0), list.get(1)))
+                    .map(list -> new Graph.Edge(list.get(0), list.get(1)))
                     .collect(toList());
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -34,7 +34,7 @@ class DepthFirstSearch {
 
     static int countGraphs(String path) {
         DepthFirstSearch task = new DepthFirstSearch();
-        List<GraphUtils.Edge> edgeList = getEdgesFromFile(path);
+        List<Graph.Edge> edgeList = getEdgesFromFile(path);
         task.adjacentMatrix = createAdjMatrix(edgeList);
 //        List<Graph> graphs = task.findGraphsDeclarativeWay();
         List<Graph> graphs = task.findGraphsImperativeWay();
@@ -42,9 +42,9 @@ class DepthFirstSearch {
         return (graphs.size());
     }
 
-    private static Map<Integer, Set<Integer>> createAdjMatrix(List<GraphUtils.Edge> edgeList) {
+    private static Map<Integer, Set<Integer>> createAdjMatrix(List<Graph.Edge> edgeList) {
         Map<Integer, Set<Integer>> adjMatrix = new HashMap<>();
-        for (GraphUtils.Edge e : edgeList) {
+        for (Graph.Edge e : edgeList) {
             adjMatrix.putIfAbsent(e.x, new HashSet<>());
             adjMatrix.get(e.x).add(e.y);
 
@@ -62,7 +62,7 @@ class DepthFirstSearch {
                 .filter(k -> !visitedVertices.contains(k))
                 .map(k -> {
                     Graph g = dfs(k);
-                    visitedVertices.addAll(g.vertex);
+                    visitedVertices.addAll(g.getVertices());
                     return g;
                 }).toList();
     }
@@ -77,7 +77,7 @@ class DepthFirstSearch {
                 continue;
             }
             Graph graph = dfs(vertex);
-            visitedVertices.addAll(graph.vertex);
+            visitedVertices.addAll(graph.getVertices());
             graphs.add(graph);
         }
         return graphs;
@@ -99,27 +99,11 @@ class DepthFirstSearch {
             stackToUse.addAll(elementsToCheck);
         }
 
-        return new Graph((visitedVertices));
+        return new Graph(visitedVertices);
     }
 
     private Set<Integer> getAdjacent(Integer vertex) {
         return this.adjacentMatrix.get(vertex);
-    }
-
-    class Graph {
-        private final Set<Integer> vertex;
-
-        Graph(Set<Integer> vertex) {
-            this.vertex = new HashSet<>();
-            this.vertex.addAll(vertex);
-        }
-
-        @Override
-        public String toString() {
-            return "Graph{ " +
-                    "edges=" + vertex +
-                    '}';
-        }
     }
 }
 
