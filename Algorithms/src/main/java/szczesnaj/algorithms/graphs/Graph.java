@@ -41,40 +41,9 @@ class Graph {
 }
 
 record EdgeWithWeights(String node, String ngb, Integer cost) {
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof EdgeWithWeights that)) return false;
-        return Objects.equals(node, that.node);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(node);
-    }
-
-    @Override
-    public String toString() {
-        return "Edge{" +
-                "node='" + node + '\'' +
-                ", ngb='" + ngb + '\'' +
-                ", cost=" + cost +
-                '}';
-    }
 }
 
-record NodeWithCost(String parentName, Integer cost) {
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof NodeWithCost that)) return false;
-        return Objects.equals(parentName, that.parentName) && Objects.equals(cost, that.cost);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(parentName, cost);
-    }
+record NodeWithCost(String nextNode, Integer cost) {
 }
 
 class DirectedGraph {
@@ -91,7 +60,7 @@ class DirectedGraph {
     Integer getEdgeCost(String searchingNode, String ancestorNode) {
         Set<NodeWithCost> nodesWithCosts = adjacentMatrices.get(ancestorNode);
         Optional<Integer> cost = nodesWithCosts.stream()
-                .filter(e -> e.parentName().equals(searchingNode))
+                .filter(e -> e.nextNode().equals(searchingNode))
                 .map(NodeWithCost::cost)
                 .findFirst();
         return cost.orElse(null);
@@ -107,17 +76,7 @@ class DirectedGraph {
     }
 }
 
-
+record LowestCostPath(Integer cost, List<String> path){
+}
 record InfoShortcut(Integer ancestor, Integer distance) {
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof InfoShortcut that)) return false;
-        return Objects.equals(ancestor, that.ancestor) && Objects.equals(distance, that.distance);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(ancestor, distance);
-    }
 }
